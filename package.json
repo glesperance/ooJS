@@ -1,0 +1,15 @@
+{
+  "name": "ooJS"
+, "description": "Your best tool in leveraging javascript prototype object model"
+, "version": "0.0.1"
+, "homepage": "http://gleseprance.com"
+, "repository":
+  { "type" : "git"
+  , "url" : "git://github.com/glesperance/ooJS.git"
+  }
+, "author": "Gabriel Lesperance <gabriel@wavo.me> (glesperance.com / wavo.me)"
+, "main": "oo.js"
+, "engines": {
+    "node": ">=0.4.4"
+  }
+}
