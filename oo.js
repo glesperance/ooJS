@@ -1,5 +1,22 @@
-
-function __extends(child, parent, options) {
+/******************************************************************************
+ * extend is used when you want to merge to copy a parent's property to the 
+ * child.
+ * 
+ * Moreover, arrays are merged.
+ * 
+ * *options*
+ *   - overwrite: Copy all of the parent's properties to the child even if
+ *                overwriting those if needed.                
+ *   - copyOnWrite:
+ *                returns a new copy of the child, leaving the original one
+ *                untouched, if modified.
+ * 
+ * @param child the child object
+ * @param parent the parent object
+ * @param options the option object
+ * @returns {child | copy of Child (with options.copyOnWrite === true) }
+ */
+function extend(child, parent, options) {
   
   var options = options || {}
     , child_copy = undefined;
@@ -20,11 +37,28 @@ function __extends(child, parent, options) {
   }
   return child_copy || child;
 };
-exports.__extends = __extends;
-/*****************************************************************************/
+exports.extend = extend;
 
-
-function __deepExtends(child, parent, options) { 
+/******************************************************************************
+ * deepExtend is used when you want to merge two objects together, by 
+ * recursively traversing the objects and adding a parent's property to the 
+ * child.
+ * 
+ * Arrays are merged.
+ * 
+ * *options*
+ *   - overwrite: Copy all of the parent's properties to the child even if
+ *                overwriting those if needed.                
+ *   - copyOnWrite:
+ *                returns a new copy of the child, leaving the original one
+ *                untouched, if modified.
+ * 
+ * @param child the child object
+ * @param parent the parent object
+ * @param options the option object
+ * @returns {child | copy of Child (with options.copyOnWrite === true) }
+ */
+function deepExtend(child, parent, options) { 
   
   var options = options || {}
     , child_copy = undefined
@@ -88,42 +122,52 @@ function __deepExtends(child, parent, options) {
   return child_copy || child;
 };
 
-exports.__deepExtends = __deepExtends;
+exports.deepExtend = deepExtend;
 
-/*****************************************************************************/
-
-function inherits(child, parent) {
+/******************************************************************************
+ * Performs inheritance of parent attributes/functions to child
+ * 
+ * @param child The child object
+ * @param parent The parent object
+ */
+function inherit(child, parent, options) {
   
-  ///copy all members of parents to this (the child)
-  __deepExtends(child, parent);
+  if(options && options.deepExtend) {
+    //copy all members of parents to this (the child)
+    deepExtend(child, parent);
+  } else {
+    extend(child, parent);
+  }
   
   //constructor helper
-  function ctor() {}
+  function ctor() { this.constructor = child; }
   
   //set ctor prototype to the parent's
   ctor.prototype = parent.prototype;
   
-  //set the child's prototype to new object such that
-  //
-  // (1) child.prototype.constructor = obj.contructor = child
-  // (2) child.prototype.__proto__   = obj.__proto__ 
-  //                                 = ctor.prototype 
-  //                                 = parent.prototype
-  child.prototype = __deepExtends(new ctor, child.prototype, {overwrite: true});
+  /* Put the parent's prototype in the child's prototype hierarchy
+   *
+   * i.e. set the child's prototype to new object such that
+   *
+   * (1) child.prototype.constructor = parent.contructor = child
+   * (2) child.prototype.__proto__   = parent.__proto__ 
+   *                                 = ctor.prototype 
+   *                                 = parent.prototype
+   */
+  child.prototype = extend(new ctor, child.prototype, {overwrite: true});
   
-  //set the constructor of the current context back to the child's
-  child.prototype.constructor = child;
-  
-  //save the parent's prototype for direct future reference
+  //save the parent's prototype for future reference
   child.__super__ = parent;
-  child.prototype.__super__ = parent.prototype;
 };
 
-exports.inherits = inherits;
+exports.inherit = inherit;
 
-/*****************************************************************************/
-
-exports.unimplemented = function unimplemented(name) {
+/******************************************************************************
+ * Placeholder used to implement interfaces or abstract classes.
+ * 
+ * @param name the name of the placeholder function
+ */
+function unimplemented(name) {
   return function(){
     throw "xxx function " + name + "() hasn't been implemented";
   };
