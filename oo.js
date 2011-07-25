@@ -1,20 +1,21 @@
 /******************************************************************************
  * extend is used when you want to merge to copy a parent's property to the 
  * child.
- * 
- * Moreover, arrays are merged.
- * 
- * *options*
- *   - overwrite: Copy all of the parent's properties to the child even if
- *                overwriting those if needed.                
- *   - copyOnWrite:
- *                returns a new copy of the child, leaving the original one
- *                untouched, if modified.
+ *  
+ * Options:
+ *  ** overwrite **
+ *      Copy all of the parent's properties to the child even if
+ *      overwriting those if needed.   
+ *                   
+ *  **copyOnWrite**
+ *      returns a new copy of the child, leaving the original one
+ *      untouched, if modified.
  * 
  * @param child the child object
  * @param parent the parent object
- * @param options the option object
- * @returns {child | copy of Child (with options.copyOnWrite === true) }
+ * @param options the option object      
+ * @returns `child` or a copy of `child` (with options.copyOnWrite === true)
+ * @api public
  */
 function extend(child, parent, options) {
   
@@ -46,16 +47,19 @@ exports.extend = extend;
  * 
  * Arrays are merged.
  * 
- * *options*
- *   - overwrite: Copy all of the parent's properties to the child even if
- *                overwriting those if needed.                
- *   - copyOnWrite:
- *                returns a new copy of the child, leaving the original one
- *                untouched, if modified.
+ * Options:
+ *  ** overwrite **
+ *      Copy all of the parent's properties to the child even if
+ *      overwriting those if needed.   
+ *                   
+ *  **copyOnWrite**
+ *      returns a new copy of the child, leaving the original one
+ *      untouched, if modified.
+ *
  * 
  * @param child the child object
  * @param parent the parent object
- * @param options the option object
+ * @param options the object containing the options
  * @returns {child | copy of Child (with options.copyOnWrite === true) }
  */
 function deepExtend(child, parent, options) { 
@@ -87,10 +91,10 @@ function deepExtend(child, parent, options) {
         dst[prop] = dst[prop] || new parent[prop].constructor();
         dst[prop] = arguments.callee(dst[prop], parent[prop], options);
       }else{
-        /**
-         * if the prop is *not* an object (or is null)
-         * copy it in the child if it doesn't already exists
-         */  
+        //
+        // if the prop is *not* an object (or is null)
+        // copy it in the child if it doesn't already exists
+        //  
         
         if(typeof parent[prop] === 'object' 
         && parent[prop] !== null 
@@ -145,15 +149,15 @@ function inherit(child, parent, options) {
   //set ctor prototype to the parent's
   ctor.prototype = parent.prototype;
   
-  /* Put the parent's prototype in the child's prototype hierarchy
-   *
-   * i.e. set the child's prototype to new object such that
-   *
-   * (1) child.prototype.constructor = parent.contructor = child
-   * (2) child.prototype.__proto__   = parent.__proto__ 
-   *                                 = ctor.prototype 
-   *                                 = parent.prototype
-   */
+  // Put the parent's prototype in the child's prototype hierarchy
+  //
+  // i.e. set the child's prototype to new object such that
+  //
+  // (1) child.prototype.constructor = parent.contructor = child
+  // (2) child.prototype.__proto__   = parent.__proto__ 
+  //                                 = ctor.prototype 
+  //                                 = parent.prototype
+  //
   child.prototype = extend(new ctor, child.prototype, {overwrite: true});
   
   //save the parent's prototype for future reference
@@ -169,6 +173,6 @@ exports.inherit = inherit;
  */
 function unimplemented(name) {
   return function(){
-    throw "xxx function " + name + "() hasn't been implemented";
+    throw 'xxx function ' + name + '() hasn not been implemented';
   };
 };
