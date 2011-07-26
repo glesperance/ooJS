@@ -14,7 +14,7 @@
  * @param child the child object
  * @param parent the parent object
  * @param options the option object      
- * @returns `child` or a copy of `child` (with options.copyOnWrite === true)
+ * @returns child or a copy of child (with options.copyOnWrite === true)
  * @api public
  */
 function extend(child, parent, options) {
@@ -27,7 +27,7 @@ function extend(child, parent, options) {
       var dst = undefined;
       
       if(options.copyOnWrite) {
-        child_copy = child_copy || __extends({}, child);
+        child_copy = child_copy || extend({}, child);
         dst = child_copy
       }else{
         dst = child;
@@ -60,7 +60,7 @@ exports.extend = extend;
  * @param child the child object
  * @param parent the parent object
  * @param options the object containing the options
- * @returns {child | copy of Child (with options.copyOnWrite === true) }
+ * @returns child | copy of Child (with options.copyOnWrite === true) 
  */
 function deepExtend(child, parent, options) { 
   
@@ -75,7 +75,7 @@ function deepExtend(child, parent, options) {
       var dst;
       
       if(options.copyOnWrite) {
-        child_copy = child_copy || __extends({}, child);
+        child_copy = child_copy || extend({}, child);
         dst = child_copy;
       }else{
         dst = child;
