@@ -1,7 +1,7 @@
 {
   "name": "oo"
 , "description": "Your best tool in leveraging javascript prototype object model"
-, "version": "0.0.2"
+, "version": "0.0.3"
 , "homepage": "http://glesperance.com"
 , "repository":
   { "type" : "git"

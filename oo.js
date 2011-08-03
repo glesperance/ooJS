@@ -213,7 +213,7 @@ function traverse(object, path, index) {
   
   if (!path || path.length === index || !object) {
   
-    returns object; 
+    return object; 
   
   } else {
     
